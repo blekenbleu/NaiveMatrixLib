@@ -1,6 +1,6 @@
 # NaiveMatrixLib - [*Visual Studio fork*](https://blekenbleu.github.io/static/ImageProcessing/matrix.htm)
 A simple C++ stdlib-based complex &amp; real matrix library,  
-&emsp; with matrix inversion, left division (A\b) and determinant calculation.<br />
+&emsp; with matrix inversion, [left division (A\b)](https://help.altair.com/compose/help/en_us/topics/language_guides/left_matrix_division_r.htm) and determinant calculation.<br />
 
 ## Features
 * Designed for users who don't want to use large linear algebra libs.
@@ -11,12 +11,13 @@ A simple C++ stdlib-based complex &amp; real matrix library,
 
 
 ## Available Functions
-* <b>rank</b>:    Matrix rank (Cholesky decomposition)
-* <b>det</b>:     Matrix determinant calculation
-* <b>inv</b>:     LU decomposition-based matrix inversion
-* <b>pinv</b>:    pinv(G) = inv(G' * G) * G' (<b>WARNING</b>: full-rank matrix only!)
-* <b>pinv2</b>:   Moore-Penrose pseudoinversion (same as pinv(G) in MATLAB)
-* <b>leftDiv</b>: x = A \ b, using Moore-Penrose pinv, NOT same as MATLAB for a singular matrix
+* <b>rank</b>:    Matrix rank ([Cholesky decomposition](https://www.geeksforgeeks.org/maths/cholesky-factorization/))
+* <b>det</b>:     Matrix [determinant](https://www.geeksforgeeks.org/maths/what-is-determinant-of-a-matrix/) calculation
+* <b>inv</b>:     [LU decomposition-based](https://www.geeksforgeeks.org/engineering-mathematics/l-u-decomposition-system-linear-equations/) matrix inversion
+* <b>pinv</b>:    pinv(G) = inv(G' * G) * G' (<b>WARNING</b>: [full-rank matrix](https://fiveable.me/linear-algebra-and-differential-equations/key-terms/full-rank-matrix) only!)
+* <b>pinv2</b>:   [Moore-Penrose pseudoinversion](https://www.math.ucla.edu/~laub/33a.2.12s/mppseudoinverse.pdf) (same as pinv(G) in MATLAB)
+* <b>[leftDiv</b>: x = A \ b](https://help.altair.com/compose/help/en_us/topics/language_guides/left_matrix_division_r.htm),
+	using Moore-Penrose pinv, NOT same as MATLAB for a [singular matrix](https://en.wikipedia.org/wiki/Singular_matrix)
 
 
 ## Examples (Complex Matrices Only)
@@ -40,6 +41,7 @@ int main(int argc, char **argv)
         {{1.0, 2.0}},
         {{0.0, 3.0}}};
     showMatrix(matb, "b");
+	std::cout << "leftDiv(matA, matb) << "\n";
     showMatrix(leftDiv(matA, matb), "A \\ b");
     showMatrix(matMul(inv(matA), matb), "inv(A) * b");
     showMatrix(matMul(pinv(matA), matb), "pinv(A) * b");
@@ -79,6 +81,7 @@ b : 3 x 1 Complex Matrix:
     row[2]: 1+2i;
     row[3]: 0+3i;
 
+leftDiv(matA, matb)
 A \ b : 3 x 1 Complex Matrix:
     row[1]: 0.170588+0.217647i;
     row[2]: -0.0529412+1.31176i;
