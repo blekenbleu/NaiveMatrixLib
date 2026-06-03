@@ -1,11 +1,13 @@
-# NaiveMatrixLib [*Visual Studio fork*](https://blekenbleu.github.io/static/ImageProcessing/matrix.htm)
-A simple C++ stdlib-based complex &amp; real matrix library, with matrix inversion, left division (A\b) and determinant calculation.<br />
+# NaiveMatrixLib - [*Visual Studio fork*](https://blekenbleu.github.io/static/ImageProcessing/matrix.htm)
+A simple C++ stdlib-based complex &amp; real matrix library,  
+&emsp; with matrix inversion, left division (A\b) and determinant calculation.<br />
 
 ## Features
 * Designed for users who don't want to use large linear algebra libs.
 * Only used C++ standard library, easy to learn and modify (Each file less than 600 lines).
 * Header files only, separated complex and real matrix library.
-* No recursive algorithm (using LU and Cholesky decomposition). Reliable for 1000 x 1000 and larger matrices.
+* No recursive algorithm (using LU and Cholesky decomposition).  
+  Reliable for 1000 x 1000 and larger matrices.
 
 
 ## Available Functions
@@ -98,10 +100,10 @@ pinv2(A) * b (== A \ b) : 3 x 1 Complex Matrix:
     row[3]: 0.535294-0.0411765i;
 ```
 
-## Reference
-* Pierre Courrieu, Fast Computation of Moore-Penrose Inverse Matrices, https://arxiv.org/abs/0804.4809
-* Permute Sign Calculation, page5 https://www.math.rutgers.edu/docman-lister/math-main/academics/course-materials/250/assignments/1493-250c-lab3-sakai-pdf/file
-* LU Decomposition C++ Implementation, https://blog.csdn.net/xx_123_1_rj/article/details/39553809
-* LU Decomposition, https://www.math.ucdavis.edu/~linear/old/notes11.pdf
+## References
+* Pierre Courrieu, [Fast Computation of Moore-Penrose Inverse Matrices](https://arxiv.org/abs/0804.4809)
+* [Permute Sign Calculation, page5](https://www.math.rutgers.edu/docman-lister/math-main/academics/course-materials/250/assignments/1493-250c-lab3-sakai-pdf/file)
+* [LU Decomposition C++ Implementation](https://blog.csdn.net/xx_123_1_rj/article/details/39553809)
+* [LU Decomposition](https://www.math.ucdavis.edu/~linear/old/notes11.pdf)  
 
 <p align="center">*** Project by Fanseline in Ericsson ***</p>
