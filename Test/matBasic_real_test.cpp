@@ -1,4 +1,4 @@
-#include "matBasic_real.hpp"
+#include "../matBasic_real.hpp"
 #include "matBasic_testUtil.hpp"
 
 i_real_matrix genTestMatrixA(const std::size_t nAnt)

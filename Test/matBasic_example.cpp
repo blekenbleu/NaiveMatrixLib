@@ -1,5 +1,5 @@
-#include "matBasic_real.hpp"    // Real matrices
-#include "matBasic_complex.hpp" // Complex matrices
+#include "../matBasic_real.hpp"    // Real matrices
+#include "../matBasic_complex.hpp" // Complex matrices
 
 void realMatrixExamples()
 {
