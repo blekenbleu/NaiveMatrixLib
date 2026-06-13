@@ -82,7 +82,8 @@ i_real_matrix transpose(const i_real_matrix &matG)
 // Matrix multiplication O(n^3) naive implementation
 i_real_matrix matMul(const i_real_matrix &matA, const i_real_matrix &matB)
 {
-    const std::size_t nrowsA{matA.size()}, ncolsA{matA[0].size()}, nrowsB{matB.size()}, ncolsB{matB[0].size()};
+    const std::size_t nrowsA{matA.size()}, ncolsA{matA[0].size()},
+					nrowsB{matB.size()}, ncolsB{matB[0].size()};
     i_real_matrix resMat;
     if (ncolsA != nrowsB)
     {
@@ -92,15 +93,9 @@ i_real_matrix matMul(const i_real_matrix &matA, const i_real_matrix &matB)
     resMat = initRealMatrix(nrowsA, ncolsB);
     std::size_t i{0}, j{0}, k{0};
     for (i = 0; i < nrowsA; ++i)
-    {
         for (j = 0; j < ncolsB; ++j)
-        {
             for (k = 0; k < ncolsA; ++k)
-            {
                 resMat[i][j] += matA[i][k] * matB[k][j];
-            }
-        }
-    }
     return resMat;
 }
 
@@ -118,45 +113,29 @@ std::size_t rank(const i_real_matrix &matG, const i_float_t tolerance = 1.0e-9)
         nSize = nrows;
         matA = initRealMatrix(nSize, nSize);
         for (i = 0; i < nSize; ++i)
-        {
             for (j = 0; j < nSize; ++j)
-            {
                 for (k = 0; k < ncols; ++k)
-                {
                     matA[i][j] += matG[i][k] * matG[j][k];
-                }
-            }
-        }
     }
     else
     {
         // A = G' * G
         matA = initRealMatrix(nSize, nSize);
         for (i = 0; i < nSize; ++i)
-        {
             for (j = 0; j < nSize; ++j)
-            {
                 for (k = 0; k < ncols; ++k)
-                {
                     matA[i][j] += matG[k][i] * matG[k][j];
-                }
-            }
-        }
     }
 
     // Full rank Cholesky decomposition of A
     i_float_t tol{std::abs(matA[0][0])};
     for (i = 0; i < nSize; ++i)
-    {
         if (matA[i][i] > 0)
         {
             const i_float_t temp{std::abs(matA[i][i])};
             if (temp < tol)
-            {
                 tol = temp;
-            }
         }
-    }
     tol *= tolerance;
 
     i_real_matrix matL = initRealMatrix(nSize, nSize);
@@ -167,20 +146,14 @@ std::size_t rank(const i_real_matrix &matG, const i_float_t tolerance = 1.0e-9)
         {
             matL[i][rankA] = matA[i][k];
             for (j = 0; j < rankA; ++j)
-            {
                 matL[i][rankA] -= matL[i][j] * matL[k][j];
-            }
         }
         if (matL[k][rankA] > tol)
         {
             matL[k][rankA] = std::sqrt(matL[k][rankA]);
             if (k < nSize)
-            {
                 for (j = k + 1; j < nSize; ++j)
-                {
                     matL[j][rankA] /= matL[k][rankA];
-                }
-            }
             ++rankA;
         }
     }
@@ -207,9 +180,7 @@ i_float_t det(const i_real_matrix &matG)
     bool changeSign{false};
 
     for (i = 0; i < nSize; ++i)
-    {
         permuteLU.push_back(i);
-    }
 
     for (j = 0; j < nSize; ++j)
     {
@@ -232,53 +203,37 @@ i_float_t det(const i_real_matrix &matG)
     }
 
     for (i = 0; i < nSize; ++i)
-    {
         matLU.push_back(matG[permuteLU[i]]);
-    }
 
     // ******************** Step 2: LU decomposition (save both L & U in matLU) ********************
     if (matLU[0][0] == 0.0)
-    {
         return detG; // Singular matrix, det(G) = 0
-    }
 
     for (i = 1; i < nSize; ++i)
-    {
         matLU[i][0] /= matLU[0][0];
-    }
 
     for (i = 1; i < nSize; ++i)
     {
         for (j = i; j < nSize; ++j)
-        {
             for (k = 0; k < i; ++k)
-            {
                 matLU[i][j] -= matLU[i][k] * matLU[k][j]; // Calculate U matrix
-            }
-        }
         if (matLU[i][i] == 0.0)
-        {
             return detG; // Singular matrix, det(G) = 0
-        }
         for (k = i + 1; k < nSize; ++k)
         {
             for (j = 0; j < i; ++j)
-            {
                 matLU[k][i] -= matLU[k][j] * matLU[j][i]; // Calculate L matrix
-            }
             matLU[k][i] /= matLU[i][i];
         }
     }
 
     detG = 1.0;
     if (changeSign)
-    {
         detG = -1.0; // Change the sign of the determinant
-    }
+	// For triangular matrices, det(L) = prod(diag(L)) = 1,
+	//	 det(U) = prod(diag(U)), so det(G) = prod(diag(U))
     for (i = 0; i < nSize; ++i)
-    {
-        detG *= matLU[i][i]; // det(G) = det(L) * det(U). For triangular matrices, det(L) = prod(diag(L)) = 1, det(U) = prod(diag(U)), so det(G) = prod(diag(U))
-    }
+        detG *= matLU[i][i]; // det(G) = det(L) * det(U).
 
     return detG;
 }
@@ -300,9 +255,7 @@ i_real_matrix inv(const i_real_matrix &matG, const bool usePermute = true)
     // ******************** Step 1: row permutation (swap diagonal zeros) ********************
     std::vector<std::size_t> permuteLU; // Permute vector
     for (i = 0; i < nSize; ++i)
-    {
         permuteLU.push_back(i); // Push back row index
-    }
 
     if (usePermute) // Sort rows by pivot element
     {
@@ -322,14 +275,9 @@ i_real_matrix inv(const i_real_matrix &matG, const bool usePermute = true)
             }
         }
         for (i = 0; i < nSize; ++i)
-        {
             matLU.push_back(matG[permuteLU[i]]); // Make a permuted matrix with new row order
-        }
     }
-    else
-    {
-        matLU = i_real_matrix(matG); // Simply duplicate matrix
-    }
+    else matLU = i_real_matrix(matG); // Simply duplicate matrix
 
     // ******************** Step 2: LU decomposition (save both L & U in matLU) ********************
     if (matLU[0][0] == 0.0)
@@ -339,18 +287,12 @@ i_real_matrix inv(const i_real_matrix &matG, const bool usePermute = true)
         return matLU;
     }
     for (i = 1; i < nSize; ++i)
-    {
         matLU[i][0] /= matLU[0][0]; // Initialize first column of L matrix
-    }
     for (i = 1; i < nSize; ++i)
     {
         for (j = i; j < nSize; ++j)
-        {
             for (k = 0; k < i; ++k)
-            {
                 matLU[i][j] -= matLU[i][k] * matLU[k][j]; // Calculate U matrix
-            }
-        }
         if (matLU[i][i] == 0.0)
         {
             std::cout << "Warning when using inv: matrix is singular.\n";
@@ -360,9 +302,7 @@ i_real_matrix inv(const i_real_matrix &matG, const bool usePermute = true)
         for (k = i + 1; k < nSize; ++k)
         {
             for (j = 0; j < i; ++j)
-            {
                 matLU[k][i] -= matLU[k][j] * matLU[j][i]; // Calculate L matrix
-            }
             matLU[k][i] /= matLU[i][i];
         }
     }
@@ -376,20 +316,14 @@ i_real_matrix inv(const i_real_matrix &matG, const bool usePermute = true)
         // L matrix inverse, omit diagonal ones
         matLU_inv[i][i] = 1.0;
         for (k = i + 1; k < nSize; ++k)
-        {
             for (j = i; j <= k - 1; ++j)
-            {
                 matLU_inv[k][i] -= matLU[k][j] * matLU_inv[j][i];
-            }
-        }
         // U matrix inverse
         matLU_inv[i][i] = 1.0 / matLU[i][i];
         for (k = i; k > 0; --k)
         {
             for (j = k; j <= i; ++j)
-            {
                 matLU_inv[k - 1][i] -= matLU[k - 1][j] * matLU_inv[j][i];
-            }
             matLU_inv[k - 1][i] /= matLU[k - 1][k - 1];
         }
     }
@@ -397,30 +331,22 @@ i_real_matrix inv(const i_real_matrix &matG, const bool usePermute = true)
     // ******************** Step 4: Calculate G^-1 = U^-1 * L^-1 ********************
     // Lower part product
     for (i = 1; i < nSize; ++i)
-    {
         for (j = 0; j < i; ++j)
         {
             const std::size_t jp{permuteLU[j]}; // Permute column back
             matLU[i][jp] = 0.0;
             for (k = i; k < nSize; ++k)
-            {
                 matLU[i][jp] += matLU_inv[i][k] * matLU_inv[k][j];
-            }
         }
-    }
     // Upper part product
     for (i = 0; i < nSize; ++i)
-    {
         for (j = i; j < nSize; ++j)
         {
             const std::size_t jp{permuteLU[j]}; // Permute column back
             matLU[i][jp] = matLU_inv[i][j];
             for (k = j + 1; k < nSize; ++k)
-            {
                 matLU[i][jp] += matLU_inv[i][k] * matLU_inv[k][j];
-            }
         }
-    }
     return matLU; // Reused matLU as a result container
 }
 
@@ -447,26 +373,19 @@ i_real_matrix pinv2(const i_real_matrix &matG, const i_float_t tolerance = 1.0e-
         nSize = nrows;
         matA = matMul(matG, matGt); // A = G * G'
     }
-    else
-    {
-        matA = matMul(matGt, matG); // A = G' * G
-    }
+    else matA = matMul(matGt, matG); // A = G' * G
 
     // Full rank Cholesky decomposition of A
     std::size_t i{0}, j{0}, k{0};
 
     i_float_t tol{std::abs(matA[0][0])};
     for (i = 0; i < nSize; ++i)
-    {
         if (matA[i][i] > 0)
         {
             const i_float_t temp{matA[i][i]};
             if (temp < tol)
-            {
                 tol = temp;
-            }
         }
-    }
     tol *= tolerance;
 
     i_real_matrix matL = initRealMatrix(nSize, nSize);
@@ -477,48 +396,34 @@ i_real_matrix pinv2(const i_real_matrix &matG, const i_float_t tolerance = 1.0e-
         {
             matL[i][rankA] = matA[i][k];
             for (j = 0; j < rankA; ++j)
-            {
                 matL[i][rankA] -= matL[i][j] * matL[k][j];
-            }
         }
         if (matL[k][rankA] > tol)
         {
             matL[k][rankA] = std::sqrt(matL[k][rankA]);
             if (k < nSize)
-            {
                 for (j = k + 1; j < nSize; ++j)
-                {
                     matL[j][rankA] /= matL[k][rankA];
-                }
-            }
             ++rankA;
         }
     }
 
     if (rankA == 0)
-    {
         return matGt; // All-zero matrix's transpose
-    }
 
     // Slice L = L(:, 0:r);
     for (i = 0; i < nSize; ++i)
-    {
         for (k = 0; k < nSize - rankA; ++k)
-        {
             matL[i].pop_back();
-        }
-    }
 
     // Generalized inverse
     i_real_matrix matLt = transpose(matL);
     i_real_matrix matM = inv(matMul(matLt, matL), false);   // M = inv(L' * L)
     matA = matMul(matMul(matMul(matL, matM), matM), matLt); // A = L * M * M * L'
 
-    if (useTranspose)
-    {
-        return matMul(matGt, matA); // pinv(G) = G' * (L * M * M * L')
-    }
-    return matMul(matA, matGt); // pinv(G) = (L * M * M * L') * G'
+    return (useTranspose)
+			? matMul(matGt, matA)	// pinv(G) = G' * (L * M * M * L')
+			: matMul(matA, matGt);	// pinv(G) = (L * M * M * L') * G'
 }
 
 // Calculate left division x = A \ b, using Moore-Penrose pinv, NOT same as MATLAB for a singular matrix
@@ -526,10 +431,7 @@ i_real_matrix leftDiv(const i_real_matrix &matA, const i_real_matrix &matb)
 {
     i_real_matrix matx;
     if (matA.size() != matb.size())
-    {
         std::cout << "Error when using leftDiv: row size not match.\n";
-        return matx;
-    }
-    matx = matMul(pinv2(matA), matb); // x = A \ b = pinv(A) * b
+    else matx = matMul(pinv2(matA), matb);	// x = A \ b = pinv(A) * b
     return matx;
 }
