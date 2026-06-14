@@ -128,6 +128,7 @@ done.
 
 *12 Jun 2026*:&nbsp; add `Test/matBasic_real_fileio.hpp` to load matrices from
 	[corrCA](https://github.com/blekenbleu/CorrCA/tree/PPM) gnuplot data  
+### mpinv
 *13 Jun 2026*:
 ```
 Time elapsed - read_gnuplotdata(): 1000 us
@@ -136,7 +137,7 @@ rank(dxyRB) = 4
 rank(mpxyG) = 10 Moore-Penrose pseudoinverse of xyG
 Time elapsed - pinv2(xyG): 0 us
 Time elapsed - matMul(mpxyG, dxyRB): 0 us
-matMul(mpinv(xyG), dxyRB) : 10 x 4 Real Matrix:
+matMul(pinv2(xyG), dxyRB) : 10 x 4 Real Matrix:
     row[1]: 0.59695,  0.425711,  -0.424087,  -0.632403;
     row[2]: -0.137462,  0.880188,  -3.49798,  -1.99355;
     row[3]: 0.644413,  -0.512948,  -1.68163,  -1.42262;
